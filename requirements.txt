@@ -1,3 +1,5 @@
-dotenv
-github
 flask
+pygithub
+python-dotenv
+flask-limiter
+limits  # explicitly, but avoid async extras
