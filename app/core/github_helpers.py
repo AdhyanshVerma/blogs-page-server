@@ -5,11 +5,17 @@ Helper functions for GitHub I/O operations.
 import json
 import re
 from typing import Optional, Tuple, List, Dict, Any
-from app.core.config import repo, BRANCH, INDEX_FILE, CONTENT_PREFIX, CONTENT_SUFFIX
+from app.core.config import repo, BRANCH, INDEX_FILE, CONTENT_PREFIX, CONTENT_SUFFIX, init_github
 
 
 # Allowed ID pattern (prevents path traversal)
 ID_PATTERN = re.compile(r'^[a-zA-Z0-9_-]+$')
+
+
+def _ensure_github_initialized():
+    """Ensure GitHub is initialized before any operation."""
+    if repo is None:
+        init_github()
 
 
 def is_valid_blog_id(blog_id: str) -> bool:
@@ -19,6 +25,7 @@ def is_valid_blog_id(blog_id: str) -> bool:
 
 def read_github_file(path: str) -> Tuple[Optional[str], Optional[str]]:
     """Return content (decoded) and SHA of a file from the repo."""
+    _ensure_github_initialized()
     try:
         file_obj = repo.get_contents(path, ref=BRANCH)
         content = file_obj.decoded_content.decode("utf-8")
@@ -31,6 +38,7 @@ def read_github_file(path: str) -> Tuple[Optional[str], Optional[str]]:
 
 def write_github_file(path: str, content: str, commit_msg: str, sha: Optional[str] = None) -> bool:
     """Create or update a file on GitHub. Returns True on success."""
+    _ensure_github_initialized()
     try:
         if sha:
             repo.update_file(path, commit_msg, content, sha, branch=BRANCH)
@@ -45,6 +53,7 @@ def write_github_file(path: str, content: str, commit_msg: str, sha: Optional[st
 
 def delete_github_file(path: str, sha: str, commit_msg: str) -> bool:
     """Delete a file from GitHub. Returns True on success."""
+    _ensure_github_initialized()
     try:
         repo.delete_file(path, commit_msg, sha, branch=BRANCH)
         return True
