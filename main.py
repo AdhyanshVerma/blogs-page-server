@@ -50,7 +50,7 @@ app.secret_key = FLASK_SECRET_KEY
 limiter = Limiter(
     get_remote_address,
     app=app,
-    default_limits=["2 per day", "1 per hour"],
+    default_limits=["20000 per day", "200 per hour"],
     storage_uri="memory://"
 )
 
