@@ -38,3 +38,9 @@ def init_github():
             repo = g.get_repo(GITHUB_REPO)
         except GithubException as e:
             raise RuntimeError(f"Cannot access repo {GITHUB_REPO}: {e.data.get('message', str(e))}")
+
+
+def get_repo():
+    """Get the repo object, ensuring GitHub is initialized first."""
+    init_github()
+    return repo
