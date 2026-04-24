@@ -1,0 +1,29 @@
+```
+# Environment variables
+.env
+.env.local
+*.env.*
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+
+# Dependencies
+.venv/
+venv/
+node_modules/
+__pycache__/
+*.egg-info/
+dist/
+build/
+target/
+
+# Editors
+.vscode/
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db
+```

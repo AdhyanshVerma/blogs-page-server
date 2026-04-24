@@ -1,5 +1,6 @@
-flask
+fastapi
+uvicorn
 pygithub
 python-dotenv
-flask-limiter
-limits  # explicitly, but avoid async extras
+slowapi
+pydantic
