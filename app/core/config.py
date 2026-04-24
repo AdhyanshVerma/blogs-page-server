@@ -1,0 +1,32 @@
+"""
+Core configuration and dependencies for the FastAPI Blog Storage application.
+"""
+
+import os
+from functools import wraps
+from github import Github, GithubException
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+# ---------- Configuration ----------
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+GITHUB_REPO = os.getenv("GITHUB_REPO")  # format: "owner/repo"
+API_KEY = os.getenv("API_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY", "dev-key-change-me")
+
+if not GITHUB_TOKEN or not GITHUB_REPO or not API_KEY:
+    raise RuntimeError("Missing required env vars: GITHUB_TOKEN, GITHUB_REPO, API_KEY")
+
+# ---------- GitHub setup ----------
+g = Github(GITHUB_TOKEN)
+try:
+    repo = g.get_repo(GITHUB_REPO)
+except GithubException as e:
+    raise RuntimeError(f"Cannot access repo {GITHUB_REPO}: {e.data.get('message', str(e))}")
+
+BRANCH = "main"  # or "master"
+INDEX_FILE = "blog_index.json"
+CONTENT_PREFIX = "blog_"
+CONTENT_SUFFIX = ".json"
